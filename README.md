@@ -18,14 +18,28 @@ This is a team project for SC3021 Data Science Fundamentals at Nanyang Technolog
 
 ## Dataset Sources
 
-| ID | Dataset | Source |
-|----|---------|--------|
-| DS1 | HDB Resale Flat Prices (Jan 2017 onwards) | [data.gov.sg](https://data.gov.sg) |
-| DS2–DS5 | Historical PSI Data 2021–2024 | [data.gov.sg](https://data.gov.sg) |
-| DS6 | Singapore Train Station Coordinates | Kaggle |
-| DS7 | Hospital Coordinates | — (rejected, see below) |
-| DS8 | General Information of Schools | [data.gov.sg](https://data.gov.sg) |
-| DS9 | Singapore City Geo-Coordinates | [geodatos.net](https://www.geodatos.net/en/coordinates/singapore) |
+## Dataset Sources
+
+> \* = selected for analysis | Datasets without \* were considered but rejected
+
+### Property Price Data
+- [DS1 — Resale Flat Prices (Based on Registration Date) from Jan 2017 onwards](https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view) `selected`
+
+### Air Quality Data
+- [DS2 — Historical Pollutant Standards Index (PSI) 2021](https://data.gov.sg/datasets/d_05b35c51664e1bb6f4dcd78478ae1abe/view) `selected`
+- [DS3 — Historical Pollutant Standards Index (PSI) 2022](https://data.gov.sg/datasets/d_d3fb32451d63dc48dc425146ec014516/view) `selected`
+- [DS4 — Historical Pollutant Standards Index (PSI) 2023](https://data.gov.sg/datasets/d_10501b71361f97dbbbab82095406c9c5/view) `selected`
+- [DS5 — Historical Pollutant Standards Index (PSI) 2024](https://data.gov.sg/datasets/d_9213cd2e4631f7148ab5932a10df9958/view) `selected`
+
+### Location / Amenities Data
+- [DS6 — Singapore Train Station Coordinates](https://www.kaggle.com/datasets/yxlee245/singapore-train-station-coordinates) `selected`
+- [DS7 — Hospitals with Coordinates](https://www.kaggle.com/datasets/muhdirshath/hospitals-in-singapore) `rejected — see DS7 section below`
+
+### Education Amenities
+- [DS8 — General Information of Schools](https://data.gov.sg/datasets/d_688b934f82c1059ed0a6993d2a829089/view) `selected`
+
+### Geographic Mapping Data
+- [DS9 — Singapore City Geo-Coordinates](https://www.kaggle.com/datasets/shymammoth/singapore-city-geo-coordinates-more-reliable) `selected`
 
 ---
 
