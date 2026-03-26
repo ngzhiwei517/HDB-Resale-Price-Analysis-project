@@ -113,10 +113,10 @@ Data preparation follows a structured pipeline of profiling, structuring, cleani
 
 | Model | Features | R² (Test) | RMSE (SGD) | CV R² |
 |-------|----------|-----------|------------|-------|
-| Model 1 — Baseline Linear Regression | Housing only | 0.592 | ~107,000 | ~0.591 |
-| Model 2 — Enriched Linear Regression | All features | 0.609 | ~105,000 | ~0.608 |
-| Model 3 — Decision Tree (depth=8) | All features | 0.774 | ~83,000 | ~0.770 |
-| Model 4 — XGBoost (Tuned)  *Best | All features | **0.953** | **38,479** | **0.951** |
+| Model 1 — Baseline Linear Regression | Housing only | 0.592 | 113,105 | ~0.591 |
+| Model 2 — Enriched Linear Regression | All features | 0.609 | 110,742 | ~0.608 |
+| Model 3 — Decision Tree (depth=8) | All features | 0.774 | 84,267 | ~0.770 |
+| Model 4 — XGBoost (Tuned) *Best | All features | **0.953** | **38,479** | **0.951** |
 
 **Best model hyperparameters:** `max_depth=8`, `n_estimators=400`, `learning_rate=0.1`, `subsample=0.9`, `colsample_bytree=0.7`
 
@@ -130,10 +130,9 @@ Data preparation follows a structured pipeline of profiling, structuring, cleani
 | 2 | MRT Distance | 0.150 | Connectivity outranks floor area |
 | 3 | Floor Area (sqm) | 0.118 | Physical size still important |
 | 4 | School Count | 0.093 | Education access adds moderate value |
-| 5 | Remaining Lease | 0.078 | Lease length matters |
-| 6 | Air Quality PM2.5 | 0.044 | Minimal effect within Singapore's narrow pollution range |
-| 7 | Storey Level | 0.032 | Least impactful housing attribute |
-
+| 5 | Remaining Lease | 0.059 | Lease length matters |
+| 6 | Storey Level | 0.050 | Moderate influence on price |
+| 7 | Air Quality PM2.5 | 0.044 | Minimal effect within Singapore's narrow pollution range |
 ---
 
 ## Recommendations
