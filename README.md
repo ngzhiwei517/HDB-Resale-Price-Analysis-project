@@ -24,7 +24,7 @@ This project explores how **air quality** and **proximity to public facilities**
 | DS4 | Historical PSI Data 2023 | [data.gov.sg](https://data.gov.sg/datasets/d_10501b71361f97dbbbab82095406c9c5/view) |
 | DS5 | Historical PSI Data 2024 | [data.gov.sg](https://data.gov.sg/datasets/d_9213cd2e4631f7148ab5932a10df9958/view) |
 | DS6 | Singapore Train Station Coordinates | [Kaggle](https://www.kaggle.com/datasets/yxlee245/singapore-train-station-coordinates) |
-| DS7 | Hospital Coordinates ❌ Rejected | [Kaggle](https://www.kaggle.com/datasets/muhdirshath/hospitals-in-singapore) |
+| DS7 | Hospital Coordinates  *Rejected | [Kaggle](https://www.kaggle.com/datasets/muhdirshath/hospitals-in-singapore) |
 | DS8 | General Information of Schools | [data.gov.sg](https://data.gov.sg/datasets/d_688b934f82c1059ed0a6993d2a829089/view) |
 | DS9 | Singapore City Geo-Coordinates | [Kaggle](https://www.kaggle.com/datasets/shymammoth/singapore-city-geo-coordinates-more-reliable) |
 
@@ -58,7 +58,7 @@ Data preparation follows a structured pipeline of profiling, structuring, cleani
 - 2 stations found with incorrect coordinates pointing outside Singapore → corrected using OneMap API
 - **Cleaning:** fix 2 erroneous coordinates via OneMap API | deduplicate interchange stations
 
-### DS7 — Hospital Coordinates ❌ Rejected
+### DS7 — Hospital Coordinates *Rejected
 - Only 24 hospitals, heavily concentrated in central Singapore
 - `dist_to_nearest_hospital` would show near-zero variation across HDB towns → weak regression feature
 - **Decision:** excluded from further analysis
@@ -116,7 +116,7 @@ Data preparation follows a structured pipeline of profiling, structuring, cleani
 | Model 1 — Baseline Linear Regression | Housing only | 0.592 | ~107,000 | ~0.591 |
 | Model 2 — Enriched Linear Regression | All features | 0.609 | ~105,000 | ~0.608 |
 | Model 3 — Decision Tree (depth=8) | All features | 0.774 | ~83,000 | ~0.770 |
-| Model 4 — XGBoost (Tuned) ✅ Best | All features | **0.953** | **38,479** | **0.951** |
+| Model 4 — XGBoost (Tuned)  *Best | All features | **0.953** | **38,479** | **0.951** |
 
 **Best model hyperparameters:** `max_depth=8`, `n_estimators=400`, `learning_rate=0.1`, `subsample=0.9`, `colsample_bytree=0.7`
 
