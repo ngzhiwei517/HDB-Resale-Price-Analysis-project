@@ -2,9 +2,7 @@
 
 ## Project Overview
 
-This project explores how **air quality** and **proximity to public facilities** affect **HDB resale flat prices** in Singapore. Using data from 2021–2024, we build a regression model to quantify the relative contribution of environmental and accessibility factors — alongside traditional housing attributes — in explaining resale price variation.
-
-This is a team project for SC3021 Data Science Fundamentals at Nanyang Technological University (NTU), College of Computing and Data Science (CCDS).
+This project explores how **air quality** and **proximity to public facilities** affect **HDB resale flat prices** in Singapore. Using data from 2021–2024, we build and compare four regression models to quantify the relative contribution of environmental and accessibility factors — alongside traditional housing attributes — in explaining resale price variation.
 
 ---
 
@@ -18,17 +16,19 @@ This is a team project for SC3021 Data Science Fundamentals at Nanyang Technolog
 
 ## Dataset Sources
 
-| ID       | Dataset                                   | Source                                                                                                                          |
-|----------|-------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| DS1      | HDB Resale Flat Prices (Jan 2017 onwards) | [data.gov.sg](https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view)                                            |
-| DS2      | Historical PSI Data 2021                  | [data.gov.sg](https://data.gov.sg/datasets/d_05b35c51664e1bb6f4dcd78478ae1abe/view)                                            |
-| DS3      | Historical PSI Data 2022                  | [data.gov.sg](https://data.gov.sg/datasets/d_d3fb32451d63dc48dc425146ec014516/view)                                            |
-| DS4      | Historical PSI Data 2023                  | [data.gov.sg](https://data.gov.sg/datasets/d_10501b71361f97dbbbab82095406c9c5/view)                                            |
-| DS5      | Historical PSI Data 2024                  | [data.gov.sg](https://data.gov.sg/datasets/d_9213cd2e4631f7148ab5932a10df9958/view)                                            |
-| DS6      | Singapore Train Station Coordinates       | [Kaggle](https://www.kaggle.com/datasets/yxlee245/singapore-train-station-coordinates)                                         |
-| DS7      | Hospital Coordinates                      | [Kaggle](https://www.kaggle.com/datasets/muhdirshath/hospitals-in-singapore) — rejected                                        |
-| DS8      | General Information of Schools            | [data.gov.sg](https://data.gov.sg/datasets/d_688b934f82c1059ed0a6993d2a829089/view)                                            |
-| DS9      | Singapore City Geo-Coordinates            | [Kaggle](https://www.kaggle.com/datasets/shymammoth/singapore-city-geo-coordinates-more-reliable)                              |
+| ID | Dataset | Source |
+|----|---------|--------|
+| DS1 | HDB Resale Flat Prices (Jan 2017 onwards) | [data.gov.sg](https://data.gov.sg/datasets/d_8b84c4ee58e3cfc0ece0d773c8ca6abc/view) |
+| DS2 | Historical PSI Data 2021 | [data.gov.sg](https://data.gov.sg/datasets/d_05b35c51664e1bb6f4dcd78478ae1abe/view) |
+| DS3 | Historical PSI Data 2022 | [data.gov.sg](https://data.gov.sg/datasets/d_d3fb32451d63dc48dc425146ec014516/view) |
+| DS4 | Historical PSI Data 2023 | [data.gov.sg](https://data.gov.sg/datasets/d_10501b71361f97dbbbab82095406c9c5/view) |
+| DS5 | Historical PSI Data 2024 | [data.gov.sg](https://data.gov.sg/datasets/d_9213cd2e4631f7148ab5932a10df9958/view) |
+| DS6 | Singapore Train Station Coordinates | [Kaggle](https://www.kaggle.com/datasets/yxlee245/singapore-train-station-coordinates) |
+| DS7 | Hospital Coordinates ❌ Rejected | [Kaggle](https://www.kaggle.com/datasets/muhdirshath/hospitals-in-singapore) |
+| DS8 | General Information of Schools | [data.gov.sg](https://data.gov.sg/datasets/d_688b934f82c1059ed0a6993d2a829089/view) |
+| DS9 | Singapore City Geo-Coordinates | [Kaggle](https://www.kaggle.com/datasets/shymammoth/singapore-city-geo-coordinates-more-reliable) |
+
+> DS7 (Hospitals) was rejected — only 24 hospitals, heavily concentrated in central Singapore, resulting in near-zero variation in distance features across HDB towns.
 
 ---
 
@@ -36,9 +36,7 @@ This is a team project for SC3021 Data Science Fundamentals at Nanyang Technolog
 
 ### Overview
 
-Data preparation follows a structured pipeline of profiling, structuring, cleaning, and enriching steps across all datasets. The diagram below summarises the full pipeline.
-
-We profiled 6 datasets in total, retaining 5 and rejecting 1 (DS7 — Hospital Coordinates), as hospitals are heavily concentrated in central Singapore, resulting in near-zero variation in distance features across HDB towns.
+Data preparation follows a structured pipeline of profiling, structuring, cleaning, and enriching steps across all datasets. We profiled 6 datasets in total, retaining 5 and rejecting 1 (DS7 — Hospital Coordinates), as hospitals are heavily concentrated in central Singapore, resulting in near-zero variation in distance features across HDB towns.
 
 ### DS1 — HDB Resale Flat Prices
 - **224,000 rows, 11 columns** | Date range: Jan 2017 – Dec 2024 | 26 towns | 7 flat types
@@ -76,30 +74,18 @@ We profiled 6 datasets in total, retaining 5 and rejecting 1 (DS7 — Hospital C
 - Tengah and Hougang have erroneous coordinates (pointing to India and Philippines respectively) → fixed manually
 - KALLANG/WHAMPOA and CENTRAL AREA missing entirely → added manually
 - 17 rows with missing coordinates confirmed safe to drop after profiling check
-- **Pipeline:** Profiling (check 17 missing-coord rows) → Structuring (fix coords, add towns, drop irrelevant cols) → Cleaning (drop 17 rows, compute centroid per town)
+- **Pipeline:** Profiling → Structuring (fix coords, add towns, drop irrelevant cols) → Cleaning (drop 17 rows, compute centroid per town)
 
 ---
 
 ## Enriching Steps
 
-All datasets are joined into DS1 in three enriching steps:
-
-### Step 1 — Geographic Enrichment (DS9 + DS6)
-- DS9 provides `region`, `latitude`, `longitude` per town (centroid)
-- DS9 centroids + DS6 station coordinates → Haversine formula → `dist_to_nearest_mrt` per town
-- **Note:** As individual flat-level coordinates were unavailable without external geocoding, town-level centroids are used as a spatial approximation. All flats within the same town share the same distance value. This is acknowledged as a limitation.
-
-### Step 2 — School Enrichment (DS8)
-- DS8 school counts aggregated by `dgp_code` (town)
-- Left join into DS1 by `town` → adds `school_count`
-
-### Step 3 — Air Quality Enrichment (DS2–DS5)
-- DS1 town → DS9 region mapping → join monthly PSI table by `region` + `year` + `month_num`
-- Adds `avg_pm25` and `avg_psi` per transaction
-
-### Step 4 — Post-join Check
-- `isnull().sum()` on merged dataset to detect any nulls introduced by joins
-- Impute or drop affected rows as appropriate
+| Step | Description |
+|------|-------------|
+| Step 1 — Geographic | DS9 centroids × DS6 stations → Haversine formula → `dist_to_nearest_mrt`; extract `region`, `latitude`, `longitude` per town |
+| Step 2 — School | DS8 school counts aggregated by town → left join to DS1 by `town` → adds `school_count` |
+| Step 3 — Air Quality | DS2–5 monthly PSI → join to DS1 by `region` + `year` + `month` → adds `mean_pm25`, `mean_psi` |
+| Step 4 — Post-join | `isnull().sum()` on merged dataset; impute or drop null rows |
 
 ---
 
@@ -114,33 +100,85 @@ All datasets are joined into DS1 in three enriching steps:
 | `remaining_lease_years` | DS1 | Numeric |
 | `town` | DS1 | Categorical |
 | `region` | DS9 | Categorical |
-| `avg_pm25` | DS2–DS5 | Numeric |
-| `avg_psi` | DS2–DS5 | Numeric |
+| `mean_pm25` | DS2–DS5 | Numeric |
+| `mean_psi` | DS2–DS5 | Numeric |
 | `dist_to_nearest_mrt` | DS6 + DS9 | Numeric |
 | `school_count` | DS8 | Numeric |
 
 ---
 
-## Model Evaluation Metrics
+## Analysis
 
-- **R-squared** — proportion of price variation explained by the model
-- **Mean Squared Error (MSE)** — predictive accuracy of resale price estimates
+### Predictive Analytics
+
+| Model | Features | R² (Test) | RMSE (SGD) | CV R² |
+|-------|----------|-----------|------------|-------|
+| Model 1 — Baseline Linear Regression | Housing only | 0.592 | ~107,000 | ~0.591 |
+| Model 2 — Enriched Linear Regression | All features | 0.609 | ~105,000 | ~0.608 |
+| Model 3 — Decision Tree (depth=8) | All features | 0.774 | ~83,000 | ~0.770 |
+| Model 4 — XGBoost (Tuned) ✅ Best | All features | **0.953** | **38,479** | **0.951** |
+
+**Best model hyperparameters:** `max_depth=8`, `n_estimators=400`, `learning_rate=0.1`, `subsample=0.9`, `colsample_bytree=0.7`
+
+---
+
+## Key Findings
+
+| Rank | Feature | Importance | Insight |
+|------|---------|------------|---------|
+| 1 | Flat Type | 0.485 | Space is the primary price driver |
+| 2 | MRT Distance | 0.150 | Connectivity outranks floor area |
+| 3 | Floor Area (sqm) | 0.118 | Physical size still important |
+| 4 | School Count | 0.093 | Education access adds moderate value |
+| 5 | Remaining Lease | 0.078 | Lease length matters |
+| 6 | Air Quality PM2.5 | 0.044 | Minimal effect within Singapore's narrow pollution range |
+| 7 | Storey Level | 0.032 | Least impactful housing attribute |
+
+---
+
+## Recommendations
+
+| Stakeholder | Recommendation |
+|-------------|----------------|
+| **Current Homeowners** | Factor in MRT proximity when pricing; highlight school count and remaining lease as secondary value drivers |
+| **Future Homeowners** | Evaluate towns holistically; a smaller flat in a well-connected town may offer better value than a larger flat in a poorly connected area |
+| **Property Agents** | Use flat type and MRT distance as primary pricing anchors; avoid over-emphasising air quality as a price justification |
+| **Policymakers / Urban Planners** | Expand MRT coverage to north and west regions to reduce spatial price inequality and improve liveability |
+| **General Public** | Use the interactive visualisations to explore price trends across towns and years without requiring technical background |
+
+---
+
+## Ethical Considerations
+
+### Data Ethics
+Our datasets were originally collected for administrative and environmental monitoring purposes, not housing price prediction. Repurposing them raises concerns around intended use — our model's findings on MRT proximity and school density premiums could be misused to justify aggressive pricing in affordable towns, contributing to gentrification. We also acknowledge our analysis is correlational, not causal, and that treating all schools equally in our school count feature may introduce bias.
+
+### Data Privacy and Security
+The HDB resale dataset contains transaction-level records (block, street, flat type, month) that do not include personal identifiers, but could allow re-identification in edge cases such as low-transaction towns or rare flat types. Our geospatial enrichment adds further locational detail, increasing this risk marginally. All individual-level data remained internal to the team and analysis was conducted on aggregated representations only.
 
 ---
 
 ## Known Limitations
 
-- `dist_to_nearest_mrt` is computed at the town-centroid level, not individual flat level — all flats in the same town share the same distance value
-- PSI data covers only 4 monitoring regions; North-East PSI is derived as an average of North and East readings
-- Analysis restricted to 2021–2024 (post-COVID period) — findings may not generalise to earlier periods
+- `dist_to_nearest_mrt` computed at town-centroid level — all flats in the same town share the same distance value
+- PSI data covers only 4 monitoring regions; North-East PSI derived as average of North and East
+- Analysis restricted to 2021–2024 (post-COVID); findings may not generalise to earlier periods
+- Key amenities (shopping malls, parks, hospitals) excluded from final model
+- Spatial autocorrelation between towns not corrected for
 
 ---
 
-## Team
-
-Project submitted for SC3021 Data Science Fundamentals
-Nanyang Technological University, CCDS
-AY2025/26
+## Tech Stack
+```
+Python 3.x
+├── pandas, numpy          — data manipulation
+├── matplotlib, seaborn    — static visualisation
+├── plotly                 — interactive visualisation
+├── scikit-learn           — Linear Regression, Decision Tree, GridSearchCV
+├── xgboost                — gradient boosting regressor
+├── joblib                 — model serialisation
+└── scipy                  — hypothesis testing (Mann-Whitney U, ANOVA)
+```
 
 ---
 
