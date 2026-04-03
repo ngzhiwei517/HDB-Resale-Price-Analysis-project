@@ -188,11 +188,13 @@ The HDB resale dataset contains transaction-level records that do not include pe
 ---
 
 ## 🛠️ Tech Stack
-Python 3.x
-├── pandas, numpy          — data manipulation
-├── matplotlib, seaborn    — static visualisation
-├── plotly                 — interactive visualisation
-├── scikit-learn           — Linear Regression, Decision Tree, GridSearchCV
-├── xgboost                — gradient boosting regressor
-├── joblib                 — model serialisation
-└── scipy                  — hypothesis testing (Mann-Whitney U, ANOVA)
+
+| Library | Purpose |
+|---------|---------|
+| `pandas`, `numpy` | Data manipulation and numerical computing |
+| `matplotlib`, `seaborn` | Static visualisation |
+| `plotly` | Interactive visualisation |
+| `scikit-learn` | Linear Regression, Decision Tree, GridSearchCV |
+| `xgboost` | Gradient boosting regressor |
+| `joblib` | Model serialisation |
+| `scipy` | Hypothesis testing (Mann-Whitney U, ANOVA) |
