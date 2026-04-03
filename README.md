@@ -12,6 +12,7 @@ This project explores how **air quality** and **proximity to public facilities**
 > **SC3021 Data Science Project — Group 4**
 > 
 > Hau Jia Qi | Ng Zhi Wei | Toh En Qi
+> 
 > Nanyang Technological University, College of Computing and Data Science
 
 ---
