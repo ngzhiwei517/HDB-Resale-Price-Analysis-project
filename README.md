@@ -10,6 +10,7 @@
 This project explores how **air quality** and **proximity to public facilities** affect **HDB resale flat prices** in Singapore. Using data from 2021–2024, we build and compare four regression models to quantify the relative contribution of environmental and accessibility factors — alongside traditional housing attributes — in explaining resale price variation.
 
 > **SC3021 Data Science Project — Group 4**
+> 
 > Hau Jia Qi | Ng Zhi Wei | Toh En Qi
 > Nanyang Technological University, College of Computing and Data Science
 
